@@ -11,6 +11,11 @@ export default defineConfig({
 
     }
   },
+   // ✅ ADD THIS
+  optimizeDeps: {
+    include: ['react', 'react-dom'],
+    force: true,
+  },
   plugins: [
     tailwindcss(),
   ],
