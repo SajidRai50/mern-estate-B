@@ -38,6 +38,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import express from "express";
 import mongoose from "mongoose";
+import cookieParser from "cookie-parser";
 
 
 import userRouter from "./routes/user.route.js";
@@ -49,6 +50,7 @@ import uploadRouter from "./routes/upload.route.js";
 const app = express();
 
 app.use(express.json());
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 console.log("MONGO_URI:", process.env.MONGO_URI);
