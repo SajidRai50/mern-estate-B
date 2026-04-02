@@ -1,156 +1,12 @@
-// import { useSelector } from 'react-redux';
-// import {useRef} from 'react'
-
-// export const Profile = () => {
-//   const fileRef = useRef(null)
-//   const {currentUser} = useSelector((state)=> state.user)
-//   return (
-//     <div className='p-3 max-w-lg mx-auto'>
-//       <h1 className='text-3xl font-semibold text-center my-7'>Profile</h1>
-//       <form  className='flex flex-col gap-4'>
-//         <input type="file" ref ={fileRef} hidden accept='image/*' />
-//         <img onClick={()=>fileRef.current.click()}
-//         src={currentUser.avatar} alt='profile' className='rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2'/>
-
-//         <input type="text" placeholder='username' id='username' className='border p-3 rounded-lg'/>
-//         <input type="text" placeholder='email' id='email' className='border p-3 rounded-lg'/>
-//         <input type="text" placeholder='password' id='password' className='border p-3 rounded-lg'/>
-//         <button className='bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-080'>update</button>
-//       </form>
-//       <div className='flex justify-between mt-5'>
-//         <span className='text-red-700 cursor-pointer'>Delete Account</span>
-//         <span className='text-red-700 cursor-pointer'>sign Out</span>
-//       </div>
-//     </div>
-//   )
-
-
-
-
-// import { useSelector } from "react-redux";
-// import { useRef, useState } from "react";
-
-// export const Profile = () => {
-//   const fileRef = useRef(null);
-//   const { currentUser } = useSelector((state) => state.user);
-
-//   const [file, setFile] = useState(null);
-//   const [imageUrl, setImageUrl] = useState(currentUser.avatar);
-//   const [uploading, setUploading] = useState(false);
-//   const [imageUploadError, setImageUploadError] = useState(null);
-
-//   const handleFileChange = async (e) => {
-//     const selectedFile = e.target.files[0];
-//     if (!selectedFile) return;
-
-//     setFile(selectedFile);
-//     setImageUploadError(null);
-
-//     const formData = new FormData();
-//     formData.append("image", selectedFile);
-
-//     try {
-//       setUploading(true);
-
-//       const res = await fetch("/api/upload", {
-//         method: "POST",
-//         body: formData,
-//       });
-
-//       const data = await res.json();
-
-//       if (!res.ok) {
-//         setImageUploadError(data.message || "Image upload failed");
-//         setUploading(false);
-//         return;
-//       }
-
-//       setImageUrl(data.url);
-//       setUploading(false);
-//     } catch (error) {
-//       setImageUploadError("Image upload failed");
-//       setUploading(false);
-//     }
-//   };
-
-//   return (
-//     <div className="p-3 max-w-lg mx-auto">
-//       <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
-
-//       <form className="flex flex-col gap-4">
-//         <input
-//           type="file"
-//           ref={fileRef}
-//           hidden
-//           accept="image/*"
-//           onChange={handleFileChange}
-//         />
-
-//         <img
-//           onClick={() => fileRef.current.click()}
-//           src={imageUrl}
-//           alt="profile"
-//           className="rounded-full h-24 w-24 object-cover cursor-pointer self-center mt-2"
-//         />
-
-//         {uploading && (
-//           <p className="text-sm text-slate-500 text-center">
-//             Uploading image...
-//           </p>
-//         )}
-
-//         {imageUploadError && (
-//           <p className="text-sm text-red-700 text-center">
-//             {imageUploadError}
-//           </p>
-//         )}
-
-//         <input
-//           type="text"
-//           placeholder="username"
-//           id="username"
-//           className="border p-3 rounded-lg"
-//           defaultValue={currentUser.username}
-//         />
-
-//         <input
-//           type="text"
-//           placeholder="email"
-//           id="email"
-//           className="border p-3 rounded-lg"
-//           defaultValue={currentUser.email}
-//         />
-
-//         <input
-//           type="password"
-//           placeholder="password"
-//           id="password"
-//           className="border p-3 rounded-lg"
-//         />
-
-//         <button className="bg-slate-700 text-white rounded-lg p-3 uppercase hover:opacity-95 disabled:opacity-80">
-//           update
-//         </button>
-//       </form>
-
-//       <div className="flex justify-between mt-5">
-//         <span className="text-red-700 cursor-pointer">Delete Account</span>
-//         <span className="text-red-700 cursor-pointer">sign Out</span>
-//       </div>
-//     </div>
-//   );
-// };
-
-
-
-// for uploading iamges
-
 import { useSelector, useDispatch } from "react-redux";
 import { useRef, useState } from "react";
 import {
   updateUserStart,
   updateUserSuccess,
   updateUserFailure,
+  deleteUserSuccess,
+  deleteUserFailure,
+  deleteUserStart,
 } from "../redux/user/userSlice";
 
 export const Profile = () => {
@@ -233,10 +89,32 @@ export const Profile = () => {
 
       dispatch(updateUserSuccess(data));
       setUpdateSuccess(true);
+
     } catch (error) {
       dispatch(updateUserFailure(error.message));
     }
-  };
+  }
+  const handleDeleteUser = async ()=>{
+    try {
+      dispatch(deleteUserStart());
+      const res = await fetch(`/api/user/delete/${currentUser._id}`, {
+        method: "DELETE"});
+
+        const data = await res.json();
+
+        if (data.success === false){
+          dispatch(deleteUserFailure(data.message));
+          return;
+        }
+        dispatch(deleteUserSuccess(error.message))
+
+
+    } catch (error) {
+      dispatch (deleteUserFailure(error.message))
+    }
+  }
+
+
 
   return (
     <div className="p-3 max-w-lg mx-auto">
@@ -310,10 +188,11 @@ export const Profile = () => {
       )}
 
       <div className="flex justify-between mt-5">
-        <span className="text-red-700 cursor-pointer">Delete Account</span>
+        <span onClick={handleDeleteUser}
+         className="text-red-700 cursor-pointer">Delete Account</span>
         <span className="text-red-700 cursor-pointer">sign Out</span>
       </div>
       <p className="text-red mt-5"> {error ? error : ''}</p>
     </div>
-  );
-};
+  )
+}
