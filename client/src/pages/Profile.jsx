@@ -313,6 +313,7 @@ export const Profile = () => {
         <span className="text-red-700 cursor-pointer">Delete Account</span>
         <span className="text-red-700 cursor-pointer">sign Out</span>
       </div>
+      <p className="text-red mt-5"> {error ? error : ''}</p>
     </div>
   );
 };
