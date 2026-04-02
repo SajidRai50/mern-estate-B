@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useRef, useState } from "react";
+import {Link} from 'react-router-dom'
 import {
   updateUserStart,
   updateUserSuccess,
@@ -189,6 +190,9 @@ export const Profile = () => {
         >
           {loading ? "Loading..." : "Update"}
         </button>
+        <Link className='bg-green-700 text-white rounded-lg p-3 uppercase hover:opacity-95 text-center  ' to ={'/create-listing'}>
+        Create Listing
+        </Link>
       </form>
 
       {error && <p className="text-red-700 mt-5">{error}</p>}

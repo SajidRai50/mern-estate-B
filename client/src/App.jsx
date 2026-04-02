@@ -6,6 +6,7 @@ import { Profile } from "./pages/Profile";
 import { Home } from "./pages/Home.jsx";
 import { About } from "./pages/About.jsx";
 import { Header } from "./components/Header.jsx";
+import {CreateListing} from "./pages/CreateListing.jsx"
 import  {PrivateRoute}  from "./components/PrivateRoute.jsx"
 export const App = () => {
   return (
@@ -13,12 +14,13 @@ export const App = () => {
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/sign-in" element={<SignIn />} />
-        <Route path="/sign-up" element={<SignUp />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/sign-in" element={<SignIn/>} />
+        <Route path="/sign-up" element={<SignUp/>} />
+        <Route path="/about" element={<About/>} />
 
         <Route element={<PrivateRoute/>}>
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile" element={<Profile/>} />
+          <Route path="/create-listing" element={<CreateListing/>} />
        </Route>
       </Routes>
     </BrowserRouter>
