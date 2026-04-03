@@ -1,8 +1,10 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { useSelector } from "react-redux";
+import {useNavigate} from 'react-router-dom'
 
 export const CreateListing = () => {
   const { currentUser } = useSelector((state) => state.user);
+  const navigate =useNavigate();
 
   const [files, setFiles] = useState([]);
   const [formData, setFormData] = useState({
@@ -20,7 +22,7 @@ export const CreateListing = () => {
     offer: false,
     userRef: currentUser._id,
   });
-console.log(formData);
+  console.log(formData);
   const [imageUploadError, setImageUploadError] = useState("");
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
@@ -117,6 +119,7 @@ console.log(formData);
 
     if (formData.imageUrls.length < 1) {
       setError("You must upload at least one image");
+
       return;
     }
 
@@ -134,6 +137,7 @@ console.log(formData);
         headers: {
           "Content-Type": "application/json",
         },
+        credentials: "include",
         body: JSON.stringify(formData),
       });
 
@@ -145,6 +149,7 @@ console.log(formData);
 
       setLoading(false);
       console.log("Listing created:", data);
+      navigate(`/listing/${data._id}`)
     } catch (error) {
       setError(error.message || "Something went wrong");
       setLoading(false);
