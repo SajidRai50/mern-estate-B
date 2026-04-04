@@ -17,6 +17,7 @@ export const Profile = () => {
   const dispatch = useDispatch();
   const { currentUser, loading, error } = useSelector((state) => state.user);
 
+
   const [formData, setFormData] = useState({});
   const [imageUrl, setImageUrl] = useState(currentUser.avatar);
   const [uploading, setUploading] = useState(false);
@@ -24,6 +25,9 @@ export const Profile = () => {
   const [updateSuccess, setUpdateSuccess] = useState(false);
   const [showListingsError, setShowListingsError] = useState(false);
   const [userListings, setUserListings] = useState([]);
+
+
+
 
   const handleFileChange = async (e) => {
     const selectedFile = e.target.files[0];
@@ -280,7 +284,9 @@ console.log(error.message)
 
             <div className="flex flex-col">
               <button onClick={()=>handleListingDelete(listing._id)} className="text-red-700 uppercase">Delete</button>
+              <Link to={`/update-listing/${listing._id}`}>
               <button className="text-green-700 uppercase">edit</button>
+              </Link>
             </div>
           </div>
         ))}
