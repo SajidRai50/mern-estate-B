@@ -10,6 +10,7 @@ import uploadRouter from "./routes/upload.route.js";
 import listingRouter from "./routes/listing.route.js";
 
 
+
 const app = express();
 
 app.use(express.json());
@@ -34,6 +35,7 @@ app.use("/api/user", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/listing", listingRouter);
+
 
 
 app.use((err, req, res, next) => {
