@@ -19,14 +19,14 @@ app.use(cookieParser());
 app.use(express.urlencoded({ extended: true }));
 
 console.log("MONGO_URI:", process.env.MONGO_URI);
-
+const PORT = process.env.PORT || 4000;
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
     console.log("✅ MongoDB connected");
-    app.listen(3000, () => {
-      console.log("server is running at port 3000!!!!!!!!!!!");
-    });
+    app.listen(PORT, () => {
+    console.log(`server is running at port ${PORT}`);
+  });
   })
   .catch((err) => {
     console.log("❌ Error:", err);
@@ -39,10 +39,10 @@ app.use("/api/auth", authRouter);
 app.use("/api/upload", uploadRouter);
 app.use("/api/listing", listingRouter);
 
-app.use(express.static(path.join(__dirname, "/client/dist")));
-app.get('*', (req,res)=>{
-  res.sendFile(path.join(__dirname,'client' ,'dist' ,'index.html'))
-})
+// app.use(express.static(path.join(__dirname, "/client/dist")));
+app.get('/{*splat}', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+});
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
